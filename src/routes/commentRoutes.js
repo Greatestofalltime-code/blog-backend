@@ -8,7 +8,7 @@ const {
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 router.get("/:postId", getComments);
-router.post("/:postId", addComment);
-router.delete("/:id", protect, adminOnly, deleteComment);
+router.post("/:postId", protect, addComment);          // login required
+router.delete("/:id", protect, adminOnly, deleteComment); // admin only
 
 module.exports = router;

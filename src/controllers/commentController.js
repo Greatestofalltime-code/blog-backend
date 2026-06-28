@@ -17,17 +17,28 @@ const getComments = async (req, res) => {
   }
 };
 
-// ADD COMMENT
+// ADD COMMENT — logged in users only
 const addComment = async (req, res) => {
   const { postId } = req.params;
-  const { name, text } = req.body;
+  const { text } = req.body;
 
   try {
+    // Fetch user from database to get their name
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { name: true },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const comment = await prisma.comment.create({
       data: {
-        name,
+        name: user.name,
         text,
         postId: parseInt(postId),
+        userId: req.user.id,
       },
     });
 
