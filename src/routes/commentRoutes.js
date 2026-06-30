@@ -3,12 +3,14 @@ const router = express.Router();
 const {
   getComments,
   addComment,
+  likeComment,
   deleteComment,
 } = require("../controllers/commentController");
-const { protect, adminOnly } = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
 router.get("/:postId", getComments);
-router.post("/:postId", protect, addComment);          // login required
-router.delete("/:id", protect, adminOnly, deleteComment); // admin only
+router.post("/:postId", protect, addComment);
+router.post("/like/:id", protect, likeComment);
+router.delete("/:id", protect, deleteComment);
 
 module.exports = router;
